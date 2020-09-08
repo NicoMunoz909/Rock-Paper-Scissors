@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+    <style>
+        html {
+            position: relative;
+            min-height: 100%;
+        }
+        body {
+            background-image: url(images/background.png);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            font-family: 'Press Start 2P', cursive;
+            color: white;
+            margin: 0 0 40px;
+        }
+        .trackers {
+            border: 2px solid white;
+            width: 100px;
+            height: 20px;
+            margin: 2px;
+            border-radius: 2px;
+            margin-bottom: 10px;
+        }
+        .scorer {
+            display: flex;
+        }
+        #scoreboard {
+            display: flex;
+            justify-content: space-between;
+        }
+        #vs {
+            font-size: 30px;
+            margin-top: 0px;
+        }
+        header {
+            width: fit-content;
+            margin: auto;
+            text-align: center;
+        }
+        #controls {
+            width: 380px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 80px;
+        }
+        #start {
+            font-size: 40px;
+            margin:auto;
+            margin-top: 100px;
+            width: 380px;
+            text-align: center;
+        }
+        #start:hover {
+            color:black;
+            cursor: pointer;
+        }
+        #lower-half {
+            display: flex;
+            justify-content: space-around;
+        }
+        button {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 5px solid;
+            font-family: inherit;
+            text-align: center;
+            font-size: 10px;
+        }
+        img {
+            width: 100px;
+            height: 100px;
+        }
+        .button {
+            position: relative;
+            cursor: pointer;
+            width: 125px;
+            height: 125px;
+            font-size: 9px;
+            color: rgb(179, 179, 179);
+            text-shadow: -1px -1px 1px rgb(59, 59, 59);
+            border-radius: 50%;
+            border: 2px solid rgb(34, 34, 34);
+            padding: 20px;
+            background-image:radial-gradient(circle ,#f7dde5 40px,#70686b 50px,#363535 52px, #c4adb4  55px);
+        }
+        
+        .button:active {
+            background-image:radial-gradient(circle ,#f7dde5 38px,#70686b 48px,#363535 50px,#363535 52px, #c4adb4  55px);
+            font-size: 8.5px;
+        }
+        .button:focus {
+            outline: none;
+        }
+        .scored {
+            background-color: white;
+        }
+        #info-text {
+            display: flex;
+            flex-direction: column;
+            height: 200px;
+            text-align: center;
+        }
+        #round-outcome {
+            padding-top: 60px;
+        }
+        #winner-announcement {
+            padding-top: 30px;
+
+        }
+        #player-selection {
+            padding-left: 110px;
+        }
+        #computer-selection {
+            padding-right: 110px;
+        }
+        footer {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 40px;
+            width: 100%;
+            overflow: hidden;
+            text-align: center;
+            font-size: 10px;
+        }
+    </style>
+    <head>
+        <title>Rock, paper, scissors</title>
+        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <header>
+            <h1>ROCK PAPER SCISSORS</h1>
+            <h2>First to 5 wins</h2>
+        </header>
+        <div id="scoreboard">
+            <div id="player">
+                <div class="scorer" id="player-score">
+                    <div class="trackers" id="1"></div> <div class="trackers" id="2"></div> <div class="trackers" id="3"></div>
+                    <div class="trackers" id="4"></div> <div class="trackers" id="5"></div>
+                </div>
+                PLAYER
+            </div>
+            <p id="vs">VS</p>
+            <div id="computer">
+                <div class="scorer" id="computer-score">
+                    <div class="trackers" id="1"></div> <div class="trackers" id="2"></div> <div class="trackers" id="3"></div>
+                    <div class="trackers" id="4"></div> <div class="trackers" id="5"></div>
+                </div>
+                COMPUTER
+            </div>
+        </div>
+        <div id="info-text"></div>
+        <div id="lower-half">
+            <p id="start">START</p>
+        </div>
+        <footer>
+            Part of my excercises of <a href="https://www.theodinproject.com" target="_blank"> The Odin Project</a> <br><br>
+            <a href="https://github.com/NicoMunoz909" target="_blank">@NicoMunoz909</a> - 2020 ||
+            Background image by <a href="https://www.deviantart.com/polymental69" target="_blank">polymental69</a>
+        </footer>
+    </body>
+    <script>
+        let computerScore = 0;
+        let playerScore = 0;
+        let computerSelection = "";
+        let playerSelection = "";
+
+        function computerPlay() {
+            let choice = Math.floor(Math.random() * (4 - 1)) + 1;
+            if (choice == 1) {
+                return "rock";
+            } else if (choice == 2) {
+                return "paper";
+            } else {
+                return "scissors";
+            }
+        }
+        function playRound (e) {
+            computerSelection = computerPlay();
+            playerSelection = e.srcElement.id;
+            computerSelectionImg.setAttribute('src',`images/${computerSelection}.png`);
+            playerSelectionImg.setAttribute('src',`images/${playerSelection}.png`);
+            lowerHalf.insertBefore(playerSelectionImg,controls);
+            lowerHalf.appendChild(computerSelectionImg);
+            infoText.appendChild(roundOutcome);
+            if (computerSelection == "rock" ) {
+                switch (playerSelection) {
+                    case "rock":
+                        roundOutcome.textContent = "TIE";
+                        break;
+                    case "paper":
+                        playerScore++;
+                        roundOutcome.textContent = "PLAYER USED PAPER!... IT'S SUPER EFFECTIVE!";
+                        player[playerScore - 1].classList.toggle('scored');
+                        break;
+                    case "scissors":
+                        computerScore++;
+                        roundOutcome.textContent = "YOUR SCISSORS GOT DESTROYED";
+                        computer[computerScore - 1].classList.toggle('scored');
+                        break;
+                }
+            }
+            if (computerSelection == "paper" ) {
+                switch (playerSelection) {
+                    case "rock":
+                        computerScore++;
+                        roundOutcome.textContent = "GOT WRAPPED AND TOSSED AWAY";
+                        computer[computerScore - 1].classList.toggle('scored');
+                        break;
+                    case "paper":
+                        roundOutcome.textContent = "TIE";
+                        break;
+                    case "scissors":
+                        playerScore++
+                        roundOutcome.textContent = "TEARED THAT SHEET INTO PIECES";
+                        player[playerScore - 1].classList.toggle('scored');
+                        break;
+                }
+            }
+            if (computerSelection == "scissors" ) {
+                switch (playerSelection) {
+                    case "rock": 
+                        playerScore++;
+                        roundOutcome.textContent = "SMASH THAT SUCKER!";
+                        player[playerScore - 1].classList.toggle('scored');
+                        break;
+                    case "paper":
+                        computerScore++;
+                        roundOutcome.textContent = "THAT IS A NASTY CUT";
+                        computer[computerScore - 1].classList.toggle('scored');
+                        break;
+                    case "scissors":
+                        roundOutcome.textContent = "TIE";
+                        break;
+                }
+            }
+            if(playerScore ==5 || computerScore == 5){
+                buttons.forEach(button => button.removeEventListener('click', playRound));
+                let winner = "";
+                if(playerScore == 5) {
+                    winner = "PLAYER";
+                    announceWinner(winner);
+                } else {
+                    winner = "COMPUTER";
+                    announceWinner(winner);
+                }
+            }
+        }
+
+        function announceWinner(winner){
+            lowerHalf.removeChild(controls);
+            infoText.appendChild(winnerAnnouncement);
+            winnerAnnouncement.textContent = `${winner} WINS!`;
+            startButton.textContent = "PLAY AGAIN";
+            lowerHalf.insertBefore(startButton,computerSelectionImg);
+            startButton.addEventListener('click', restartGame);
+        }
+
+        function restartGame(){
+            computerScore = 0;
+            playerScore = 0;
+            lowerHalf.removeChild(playerSelectionImg);
+            lowerHalf.removeChild(computerSelectionImg);
+            buttons.forEach(button => button.addEventListener('click', playRound));
+            startButton.removeEventListener('click', restartGame);
+            infoText.removeChild(roundOutcome);
+            infoText.removeChild(winnerAnnouncement);
+            player.forEach(tracker => tracker.classList.remove('scored'));
+            computer.forEach(tracker => tracker.classList.remove('scored'));
+            showControls();
+        }
+
+        function showControls() {
+            lowerHalf.removeChild(startButton);
+            lowerHalf.appendChild(controls);
+        }
+
+        const lowerHalf = document.querySelector('#lower-half');
+        const body = document.querySelector('body');
+
+        const controls = document.createElement('div');
+        controls.setAttribute('id', 'controls');
+
+        const rockButton = document.createElement('button');
+        rockButton.textContent = 'ROCK';
+        rockButton.setAttribute('id', 'rock');
+        rockButton.setAttribute('class', 'button');
+
+        const paperButton = document.createElement('button');
+        paperButton.textContent = "PAPER";
+        paperButton.setAttribute('id','paper');
+        paperButton.setAttribute('class','button');
+
+        const scissorsButton = document.createElement('button');
+        scissorsButton.textContent = "SCISSORS"
+        scissorsButton.setAttribute('id','scissors');
+        scissorsButton.setAttribute('class','button');
+
+        controls.appendChild(rockButton);
+        controls.appendChild(paperButton);
+        controls.appendChild(scissorsButton);
+
+        const playerSelectionImg = document.createElement('img');
+        playerSelectionImg.setAttribute('id','player-selection');
+        
+        const computerSelectionImg = document.createElement('img');
+        computerSelectionImg.setAttribute('id','computer-selection');
+
+        const player = document.querySelectorAll('#player-score>.trackers');
+        const computer = document.querySelectorAll('#computer-score>.trackers');
+
+        const roundOutcome = document.createElement('p');
+        roundOutcome.setAttribute('id','round-outcome');
+        roundOutcome.textContent = "";
+
+        const infoText = document.querySelector('#info-text');
+
+        const winnerAnnouncement = document.createElement('p');
+        winnerAnnouncement.setAttribute('id','winner-announcement');
+
+        const buttons = controls.querySelectorAll('.button');
+        buttons.forEach(button => button.addEventListener('click', playRound));
+
+        const startButton = document.querySelector('#start');
+        startButton.addEventListener('click', showControls);
+        
+    </script>
+</html>
