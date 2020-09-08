@@ -1,1 +1,1 @@
-A web browser rock paper and scissors made with JS. No front-end for now, played in console.
+8bit arcade inspired rock, paper and scissors web browser game. Made with plain HTML, CSS and JavaScript.
